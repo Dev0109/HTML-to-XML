@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<h2>JavaScript Numbers</h2>
+
+<div id="myDiv">
+    <span>Hey there</span>
+</div>
+<button onclick="append()">Download the inner html</button>
+<button onclick="importData()">Import Data</button>
+<script>
+function append(){
+var $html = $('#myDiv');    
+var str = $html.prop('outerHTML');
+const result = encodeURI(str);
+
+saveFile(result);
+console.log(typeof str);
+}
+/*function download(filename, text) {
+ var element = document.createElement('a');
+ element.setAttribute('href', 'data:text/plain;charset=utf-8,' + 
+ encodeURIComponent(text));
+ element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}*/
+function saveFile(textToWrite)
+{  
+    // get the textbox data...
+    var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
+    // create a hyperlink <a> element tag that will be automatically clicked below...
+    var downloadLink = document.createElement("a");
+    // set the file name...
+    downloadLink.download = "fileName.xml";
+    // set the <a> tag href as a URL to point to the Blob
+    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+    // automaitcally click the <a> element to go to the URL to save the textFileAsBlob...
+    downloadLink.click();
+}
+function importData() {
+    let input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = _ => {
+    // you can use this method to get file and perform respective operations
+            let files = input.files[0];
+			let reader = new FileReader();
+            reader.readAsText(files);
+            reader.onload = function() {
+                console.log(reader.result);
+                const div = document.getElementById("myDiv");
+                console.log(div.innerHTML);
+                div.innerHTML = decodeURI(reader.result);
+            };
+        };
+  input.click();
+}
+</script>
+
+</body>
+</html>
